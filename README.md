@@ -16,7 +16,7 @@ The code has been tested with Python 3.7, pytorch 1.6, CUDA 10.2.
 
 Download the ModelNet40 dataset from [here](https://shapenet.cs.stanford.edu/media/modelnet40_ply_hdf5_2048.zip). This dataset is the same one used in [PointNet](https://arxiv.org/abs/1612.00593), thanks to [Charles Qi](https://github.com/charlesq34/pointnet). Copy the unziped dataset to ```./data/ModelNet```. 
 
-To train the $K-1$ classifier,
+To train the K-1 classifier,
 ```
 python kb1_train_cls_conv.py
 ```
