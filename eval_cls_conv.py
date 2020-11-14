@@ -1,15 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-@Author: Wenxuan Wu, Zhongang Qi, Li Fuxin.
-@Contact: wuwen@oregonstate.edu
-@File: utils.py
-
-Modified by 
-@Author: Jiawei Chen, Linlin Li
-@Contact: jc762@duke.edu
-"""
-
 import argparse
 import os
 import sys
@@ -34,10 +22,9 @@ def parse_args():
     parser = argparse.ArgumentParser('PointConv')
     parser.add_argument('--batchsize', type=int, default=16, help='batch size')
     parser.add_argument('--gpu', type=str, default='0', help='specify gpu device')
-    parser.add_argument('--kb1checkpoint', type=str, default=None, help='k but 1 checkpoint')
-    parser.add_argument('--binarycheckpoint', type=str, default=None, help='binary checkpoint')
+    parser.add_argument('--checkpoint', type=str, default=None, help='checkpoint')
     parser.add_argument('--num_view', type=int, default=3, help='num of view')
-    parser.add_argument('--model_name', default='my_pointconv', help='model name')
+    parser.add_argument('--model_name', default='pointconv', help='model name')
     return parser.parse_args()
 
 def main(args):
@@ -52,7 +39,7 @@ def main(args):
     file_dir.mkdir(exist_ok=True)
     checkpoints_dir = file_dir.joinpath('checkpoints/')
     checkpoints_dir.mkdir(exist_ok=True)
-    os.system('cp %s %s' % (args.kb1checkpoint, checkpoints_dir))
+    os.system('cp %s %s' % (args.checkpoint, checkpoints_dir))
     log_dir = file_dir.joinpath('logs/')
     log_dir.mkdir(exist_ok=True)
 
@@ -79,31 +66,18 @@ def main(args):
     
 
     '''MODEL LOADING'''
-    num_class = 39
-    kb1classifier = PointConvClsSsg(num_class).cuda()
-    if args.kb1checkpoint is not None:
-        print('Load k but 1 CheckPoint...')
-        logger.info('Load k but 1 CheckPoint')
-        kb1checkpoint = torch.load(args.kb1checkpoint)
-        start_epoch = kb1checkpoint['epoch']
-        kb1classifier.load_state_dict(kb1checkpoint['model_state_dict'])
+    num_class = 40
+    classifier = PointConvClsSsg(num_class).cuda()
+    if args.checkpoint is not None:
+        print('Load CheckPoint...')
+        logger.info('Load CheckPoint')
+        checkpoint = torch.load(args.checkpoint)
+        start_epoch = checkpoint['epoch']
+        classifier.load_state_dict(checkpoint['model_state_dict'])
     else:
-        print('Please load k but 1 Checkpoint to eval...')
+        print('Please load Checkpoint to eval...')
         sys.exit(0)
         start_epoch = 0
-        
-    num_class1 = 2
-    binaryclassifier = PointConvClsSsg(num_class1).cuda()
-    if args.binarycheckpoint is not None:
-        print('Load binary CheckPoint...')
-        logger.info('Load binary CheckPoint')
-        binarycheckpoint = torch.load(args.binarycheckpoint)
-        start_epoch = binarycheckpoint['epoch']
-        binaryclassifier.load_state_dict(binarycheckpoint['model_state_dict'])
-    else:
-        print('Please load binary Checkpoint to eval...')
-        sys.exit(0)
-        start_epoch2 = 0
 
     blue = lambda x: '\033[94m' + x + '\033[0m'
 
@@ -119,7 +93,6 @@ def main(args):
         target = target[:, 0]
         #import ipdb; ipdb.set_trace()
         pred_view = torch.zeros(pointcloud.shape[0], num_class).cuda()
-        binary_view = torch.zeros(pointcloud.shape[0], num_class1).cuda()
 
         for _ in range(args.num_view):
             pointcloud = generate_new_view(pointcloud)
@@ -127,36 +100,14 @@ def main(args):
             #points = torch.from_numpy(pointcloud).permute(0, 2, 1)
             points = pointcloud.permute(0, 2, 1)
             points, target = points.cuda(), target.cuda()
-            kb1classifier = kb1classifier.eval()
-            binaryclassifier = binaryclassifier.eval()
+            classifier = classifier.eval()
             with torch.no_grad():
-                pred = kb1classifier(points)
-                pred_binary = binaryclassifier(points)
+                pred = classifier(points)
             pred_view += pred
-            binary_view += pred_binary        
-        
-        kb1_logprob = pred_view.data
-        binary_logprob = binary_view.data
-        ## since we assigned the composite class the largest label
-        binary_pred_logprob = kb1_logprob[:,-1].reshape(1,len(kb1_logprob[:,-1])).transpose(0,1).repeat(1,2).view(-1, 2) + binary_logprob
-        
-        pred_logprob = torch.from_numpy(np.c_[kb1_logprob[:,0:-1].cpu().detach().numpy(), binary_pred_logprob.cpu().detach().numpy()]).to('cuda')
-        pred_choices = pred_logprob.max(1)[1]
-        
-        ## reset labels
-        mapper_dict = {**{key: key + 1 for key in range(12, 32)}, **{key: key + 2 for key in range(32, 38)}, **{38: 33, 39: 12}}
 
-        def mp(entry):
-            return mapper_dict[entry] if entry in mapper_dict else entry
-        mp = np.vectorize(mp)
-        
-        #for t, p in zip(target.view(-1), pred_choices.view(-1)):
-        #        confusion_matrix[t.long(), p.long()] += 1
-
-        
-        pred_choice = torch.from_numpy(np.array(mp(pred_choices.cpu().detach().numpy()))).to('cuda')
+        pred_choice = pred_view.data.max(1)[1]
         preds.append(pred_choice.cpu().detach().numpy())
-        correct = pred_choice.eq(target.long().data).cpu().detach().numpy().sum()
+        correct = pred_choice.eq(target.long().data).cpu().sum()
         total_correct += correct.item()
         total_seen += float(points.size()[0])
 

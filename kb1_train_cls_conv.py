@@ -1,3 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@Author: Wenxuan Wu, Zhongang Qi, Li Fuxin.
+@Contact: wuwen@oregonstate.edu
+@File: utils.py
+
+Modified by 
+@Author: Jiawei Chen, Linlin Li
+@Contact: jc762@duke.edu
+"""
+
 import argparse
 import os
 import torch
