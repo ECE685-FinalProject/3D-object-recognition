@@ -23,7 +23,7 @@ python kb1_train_cls_conv.py
 
 To train the binary classifier,
 ```
-python binary_train_cls_conv.py
+python b_train_cls_conv.py
 ```
 
 To evaluate the two-stage classifier,
