@@ -3,11 +3,12 @@
 """
 @Author: Wenxuan Wu, Zhongang Qi, Li Fuxin.
 @Contact: wuwen@oregonstate.edu
-@File: utils.py
+@File: eval_cls_conv.py
 
 Modified by 
 @Author: Jiawei Chen, Linlin Li
 @Contact: jc762@duke.edu
+@File: k_eval_cls_conv.py
 """
 
 import argparse
@@ -137,11 +138,11 @@ def main(args):
         
         kb1_logprob = pred_view.data
         binary_logprob = binary_view.data
-        ## since we assigned the composite class the largest label
+        ## since we assigned the composite class the largest label, we will split the log-probability for the last label to two part, one for binary 0 and one for binary 1.
         binary_pred_logprob = kb1_logprob[:,-1].reshape(1,len(kb1_logprob[:,-1])).transpose(0,1).repeat(1,2).view(-1, 2) + binary_logprob
-        
+        ## concatenate to get log-probability for all (40) classes 
         pred_logprob = torch.from_numpy(np.c_[kb1_logprob[:,0:-1].cpu().detach().numpy(), binary_pred_logprob.cpu().detach().numpy()]).to('cuda')
-        pred_choices = pred_logprob.max(1)[1]
+        pred_choices = pred_logprob.max(1)[1] 
         
         ## reset labels
         mapper_dict = {**{key: key + 1 for key in range(12, 32)}, **{key: key + 2 for key in range(32, 38)}, **{38: 33, 39: 12}}
@@ -150,10 +151,6 @@ def main(args):
             return mapper_dict[entry] if entry in mapper_dict else entry
         mp = np.vectorize(mp)
         
-        #for t, p in zip(target.view(-1), pred_choices.view(-1)):
-        #        confusion_matrix[t.long(), p.long()] += 1
-
-        
         pred_choice = torch.from_numpy(np.array(mp(pred_choices.cpu().detach().numpy()))).to('cuda')
         preds.append(pred_choice.cpu().detach().numpy())
         correct = pred_choice.eq(target.long().data).cpu().detach().numpy().sum()
@@ -161,6 +158,7 @@ def main(args):
         total_seen += float(points.size()[0])
 
     accuracy = total_correct / total_seen
+    ## confusion matrix
     cm = confusion_matrix(test_label.ravel(), np.concatenate(preds).ravel())
     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     t = pd.read_table('data/ModelNet/shape_names.txt', names = ['label'])

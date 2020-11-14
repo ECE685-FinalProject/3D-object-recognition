@@ -1,14 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 @Author: Wenxuan Wu, Zhongang Qi, Li Fuxin.
 @Contact: wuwen@oregonstate.edu
 @File: train_cls_conv.py
-
-Modified by 
-@Author: Jiawei Chen, Linlin Li
-@Contact: jc762@duke.edu
-@File: kb1_train_cls_conv.py
 """
 
 import argparse
@@ -17,7 +10,7 @@ import torch
 import torch.nn.parallel
 import torch.utils.data
 import torch.nn.functional as F
-from data_utils.kb1_ModelNetDataLoader import ModelNetDataLoader, load_data
+from data_utils.ModelNetDataLoader import ModelNetDataLoader, load_data
 import datetime
 import logging
 from pathlib import Path
@@ -37,7 +30,7 @@ def parse_args():
     parser.add_argument('--optimizer', type=str, default='SGD', help='optimizer for training')
     parser.add_argument('--pretrain', type=str, default=None,help='whether use pretrain model')
     parser.add_argument('--decay_rate', type=float, default=1e-4, help='decay rate of learning rate')
-    parser.add_argument('--model_name', default='my_pointconv', help='model name')
+    parser.add_argument('--model_name', default='pointconv', help='model name')
     return parser.parse_args()
 
 def main(args):
@@ -79,7 +72,7 @@ def main(args):
     testDataLoader = torch.utils.data.DataLoader(testDataset, batch_size=args.batchsize, shuffle=False)
 
     '''MODEL LOADING'''
-    num_class = 39
+    num_class = 40
     classifier = PointConvClsSsg(num_class).cuda()
     if args.pretrain is not None:
         print('Use pretrain model...')
@@ -93,7 +86,7 @@ def main(args):
 
 
     if args.optimizer == 'SGD':
-        optimizer = torch.optim.SGD(classifier.parameters(), lr=args.learning_rate, momentum=0.9)
+        optimizer = torch.optim.SGD(classifier.parameters(), lr=0.01, momentum=0.9)
     elif args.optimizer == 'Adam':
         optimizer = torch.optim.Adam(
             classifier.parameters(),
@@ -141,7 +134,7 @@ def main(args):
         print('\r Test %s: %f   ***  %s: %f' % (blue('Accuracy'),acc, blue('Best Accuracy'),best_tst_accuracy))
         logger.info('Test Accuracy: %f  *** Best Test Accuracy: %f', acc, best_tst_accuracy)
 
-        if (acc >= best_tst_accuracy):
+        if (acc >= best_tst_accuracy) and epoch > 5:
             best_tst_accuracy = acc
             logger.info('Save model...')
             save_checkpoint(

@@ -3,11 +3,12 @@
 """
 @Author: Wenxuan Wu, Zhongang Qi, Li Fuxin.
 @Contact: wuwen@oregonstate.edu
-@File: utils.py
+@File: eval_cls_conv.py
 
 Modified by 
 @Author: Jiawei Chen, Linlin Li
 @Contact: jc762@duke.edu
+@File: kb1_eval_cls_conv.py
 """
 
 import argparse

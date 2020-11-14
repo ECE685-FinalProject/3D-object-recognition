@@ -1,3 +1,13 @@
+"""
+@Author: Wenxuan Wu, Zhongang Qi, Li Fuxin.
+@Contact: wuwen@oregonstate.edu
+@File: eval_cls_conv.py
+
+Modified by 
+@Author: Jiawei Chen, Linlin Li
+@Contact: jc762@duke.edu
+"""
+
 import argparse
 import os
 import sys
@@ -112,6 +122,7 @@ def main(args):
         total_seen += float(points.size()[0])
 
     accuracy = total_correct / total_seen
+    ## confusion matrix
     cm = confusion_matrix(test_label.ravel(), np.concatenate(preds).ravel())
     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     t = pd.read_table('data/ModelNet/shape_names.txt', names = ['label'])
