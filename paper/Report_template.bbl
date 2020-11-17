@@ -1,0 +1,107 @@
+\begin{thebibliography}{10}
+
+\bibitem{shapecontexts}
+S.~Belongie, J.~Malik, and J.~Puzicha.
+\newblock Shape matching and object recognition using shape contexts.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  24(4):509--522, 2002.
+
+\bibitem{ben20173d}
+Y.~Ben-Shabat, M.~Lindenbaum, and A.~Fischer.
+\newblock 3d point cloud classification and segmentation using 3d modified
+  fisher vector representation for convolutional neural networks.
+\newblock {\em arXiv preprint arXiv:1711.08241}, 2017.
+
+\bibitem{garcia2016pointnet}
+A.~Garcia-Garcia, F.~Gomez-Donoso, J.~Garcia-Rodriguez, S.~Orts-Escolano,
+  M.~Cazorla, and J.~Azorin-Lopez.
+\newblock Pointnet: A 3d convolutional neural network for real-time object
+  class recognition.
+\newblock In {\em 2016 International Joint Conference on Neural Networks
+  (IJCNN)}, pages 1578--1584. IEEE, 2016.
+
+\bibitem{sscn}
+B.~Graham and L.~Maaten.
+\newblock {Submanifold Sparse Convolutional Networks}.
+\newblock {\em arXiv e-prints}, page arXiv:1706.01307, June 2017.
+
+\bibitem{spin}
+A.~E. Johnson and M.~Hebert.
+\newblock Using spin images for efficient object recognition in cluttered 3d
+  scenes.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  21(5):433--449, 1999.
+
+\bibitem{kd}
+R.~Klokov and V.~Lempitsky.
+\newblock Escape from cells: Deep kd-networks for the recognition of 3d point
+  cloud models.
+\newblock 2017 IEEE International Conference on Computer Vision, 2017.
+
+\bibitem{voxnet}
+D.~Maturana and S.~Scherer.
+\newblock Voxnet: A 3d convolutional neural network for real-time object
+  recognition.
+\newblock 2015 IEEE/RSJ International Conference on Intelligent Robots and
+  Systems, 2015.
+
+\bibitem{pointnet}
+C.~R. Qi, H.~Su, K.~Mo, and L.~J. Guibas.
+\newblock Pointnet: Deep learning on point sets for 3d classification and
+  segmentation.
+\newblock 2017 IEEE Conference on Computer Vision and Pattern Recognition,
+  2017.
+
+\bibitem{pointnetpp}
+C.~R. Qi, L.~Yi, H.~Su, and L.~J. Guibas.
+\newblock Pointnet++: Deep hierarchical feature learning on point sets in a
+  metric space.
+\newblock In {\em Advances in Neural Information Processing Systems 30}, pages
+  5099--5108. Curran Associates, Inc., 2017.
+
+\bibitem{featurehist}
+R.~B. Rusu, N.~Blodow, and M.~Beetz.
+\newblock Fast point feature histograms (fpfh) for 3d registration.
+\newblock 2009 IEEE International Conference on Robotics and Automation, 2009.
+
+\bibitem{normalhist}
+F.~Tombari, S.~Salti, and L.~D. Stefano.
+\newblock A combined texture-shape descriptor for enhanced 3d feature matching.
+\newblock ICIP, 2011.
+
+\bibitem{dgcnn}
+Y.~Wang, Y.~Sun, Z.~Liu, S.~Sarma, M.~M. Bronstein, and J.~M. Solomon.
+\newblock {Dynamic Graph CNN for Learning on Point Clouds}.
+\newblock {\em arXiv e-prints}, page arXiv:1801.07829, January 2018.
+
+\bibitem{voxseg}
+Z.~Wang and F.~Lu.
+\newblock Voxsegnet: Volumetric cnns for semantic part segmentation of 3d
+  shapes.
+\newblock {\em IEEE Transactions on Visualization and Computer Graphics}, pages
+  1--1, 2019.
+
+\bibitem{dense}
+L.~Wei, Q.~Huang, D.~Ceylan, E.~Vouga, and H.~Li.
+\newblock Dense human body correspondences using convolutional networks.
+\newblock 2016 IEEE Conference on Computer Vision and Pattern Recognition,
+  2016.
+
+\bibitem{pointconv}
+W.~Wu, Z.~Qi, and L.~Fuxin.
+\newblock {PointConv: Deep Convolutional Networks on 3D Point Clouds}.
+\newblock {\em arXiv e-prints}, page arXiv:1811.07246, November 2018.
+
+\bibitem{modelnet}
+Z.~Wu, S.~Song, A.~Khosla, F.~Yu, L.~Zhang, X.~Tang, and J.~Xiao.
+\newblock 3d shapenets: A deep representation for volumetric shapes.
+\newblock 2015 IEEE Conference on Computer Vision and Pattern Recognition,
+  2015.
+
+\bibitem{ldgcnn}
+K.~Zhang, M.~Hao, J.~Wang, C.~Silva, and C.~Fu.
+\newblock {Linked Dynamic Graph CNN: Learning on Point Cloud via Linking
+  Hierarchical Features}.
+\newblock {\em arXiv e-prints}, page arXiv:1904.10014, April 2019.
+
+\end{thebibliography}
