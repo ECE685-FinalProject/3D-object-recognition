@@ -1,6 +1,6 @@
 # Two-stage 3D-object-recognition
 
-Jiawei Chen, Linlin Li
+Linlin Li, Jiawei Chen
 
 
 This repo is a PyTorch implementation for **two-stage PointConv for Classification on Point Clouds** adapting from **PointConv**(https://arxiv.org/abs/1811.07246). Our code skeleton is borrowed from [DylanWusee/pointconv_pytorch](https://github.com/DylanWusee/pointconv_pytorch).
